@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:internship_task_food_app/cart.dart';
 import 'package:internship_task_food_app/home.dart';
-import 'package:internship_task_food_app/product_details.dart';
+import 'package:internship_task_food_app/provider1.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Provider1()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Meat',
+      title: 'Food App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

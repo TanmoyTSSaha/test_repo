@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:internship_task_food_app/cart.dart';
 import 'package:internship_task_food_app/product_details.dart';
+import 'package:internship_task_food_app/provider1.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,279 +16,385 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   double screenHeight = 0;
   double screenWidth = 0;
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: screenHeight / 24.375, // = 32
-            left: screenHeight / 45.88, // = 17
-            right: screenHeight / 45.88, // = 17
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: IndexedStack(
+        index: selectedIndex,
+        children: [
+          //0
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: CircleAvatar(
+                radius: screenHeight / 32.5, // = 24
+                child: ClipRRect(
+                  child: Image.asset("assets/images/Ellipse.png"),
+                  borderRadius:
+                      BorderRadius.circular(screenHeight / 15.6), // = 50
+                ),
+              ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  fieldText(
+                    "Hi Marina",
+                    screenHeight / 44.57,
+                    Colors.black,
+                    FontWeight.normal,
+                  ),
+                  SizedBox(height: screenHeight / 390),
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: screenHeight / 32.5, // = 24
-                        child: ClipRRect(
-                          child: Image.asset("assets/images/Ellipse.png"),
-                          borderRadius: BorderRadius.circular(
-                              screenHeight / 15.6), // = 50
-                        ),
-                      ),
-                      SizedBox(width: screenHeight / 156),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          fieldText(
-                            "Hi Marina",
-                            screenHeight / 44.57,
-                            Colors.black,
-                            FontWeight.normal,
-                          ),
-                          SizedBox(height: screenHeight / 390),
-                          Row(
-                            children: [
-                              SizedBox(width: screenHeight / 62.4),
-                              fieldText(
-                                "8-2-596/169,Hyderabad",
-                                screenHeight / 78,
-                                Colors.black,
-                                FontWeight.normal,
-                              ),
-                            ],
-                          ),
-                        ],
+                      SizedBox(width: screenHeight / 62.4),
+                      fieldText(
+                        "8-2-596/169,Hyderabad",
+                        screenHeight / 78,
+                        Colors.black,
+                        FontWeight.normal,
                       ),
                     ],
                   ),
-                  Image.asset("assets/icons/notification.png"),
                 ],
               ),
-              SizedBox(height: screenHeight / 41.05),
-              fieldText(
-                "What would you like \nto eat today?",
-                screenHeight / 31.2,
-                Colors.black,
-                FontWeight.normal,
-              ),
-              SizedBox(height: screenHeight / 40.727),
-              fieldText(
-                "Categories",
-                screenHeight / 34.66,
-                const Color(0xFF4E424C),
-                FontWeight.w500,
-              ),
-              SizedBox(height: screenHeight / 70.90),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: foodItem(
-                      "assets/icons/Chicken.png",
-                      "Chicken",
-                      screenHeight / 7.75,
-                      screenWidth / 2.29,
-                      screenHeight / 780,
-                      screenHeight / 156,
-                      screenHeight / 48.75,
-                      const Color(0xFF4E424C),
+              actions: [
+                Image.asset("assets/icons/notification.png"),
+              ],
+            ),
+            body: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: screenHeight / 39, // = 32
+                  left: screenHeight / 45.88, // = 17
+                  right: screenHeight / 45.88, // = 17
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    fieldText(
+                      "What would you like \nto eat today?",
+                      screenHeight / 31.2,
+                      Colors.black,
                       FontWeight.normal,
                     ),
-                  ),
-                  SizedBox(width: screenHeight / 78),
-                  GestureDetector(
-                    onTap: () {},
-                    child: foodItem(
-                      "assets/icons/Meat.png",
-                      "Meat",
-                      screenHeight / 7.75,
-                      screenWidth / 2.29,
-                      screenHeight / 780,
-                      screenHeight / 156,
-                      screenHeight / 48.75,
+                    SizedBox(height: screenHeight / 40.727),
+                    fieldText(
+                      "Categories",
+                      screenHeight / 34.66,
                       const Color(0xFF4E424C),
-                      FontWeight.normal,
+                      FontWeight.w500,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: screenHeight / 28.888),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: foodItem(
-                      "assets/icons/fish.png",
-                      "Fish",
-                      screenHeight / 7.75,
-                      screenWidth / 2.29,
-                      screenHeight / 780,
-                      screenHeight / 156,
-                      screenHeight / 48.75,
+                    SizedBox(height: screenHeight / 70.90),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: foodItem(
+                            "assets/icons/Chicken.png",
+                            "Chicken",
+                            screenHeight / 7.75,
+                            screenWidth / 2.29,
+                            screenHeight / 780,
+                            screenHeight / 156,
+                            screenHeight / 48.75,
+                            const Color(0xFF4E424C),
+                            FontWeight.normal,
+                          ),
+                        ),
+                        SizedBox(width: screenHeight / 78),
+                        GestureDetector(
+                          onTap: () {},
+                          child: foodItem(
+                            "assets/icons/Meat.png",
+                            "Meat",
+                            screenHeight / 7.75,
+                            screenWidth / 2.29,
+                            screenHeight / 780,
+                            screenHeight / 156,
+                            screenHeight / 48.75,
+                            const Color(0xFF4E424C),
+                            FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight / 28.888),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: foodItem(
+                            "assets/icons/fish.png",
+                            "Fish",
+                            screenHeight / 7.75,
+                            screenWidth / 2.29,
+                            screenHeight / 780,
+                            screenHeight / 156,
+                            screenHeight / 48.75,
+                            const Color(0xFF4E424C),
+                            FontWeight.normal,
+                          ),
+                        ),
+                        SizedBox(width: screenHeight / 78),
+                        GestureDetector(
+                          onTap: () {},
+                          child: foodItem(
+                            "assets/icons/prawns.png",
+                            "Prawns",
+                            screenHeight / 7.75,
+                            screenWidth / 2.29,
+                            screenHeight / 780,
+                            screenHeight / 156,
+                            screenHeight / 48.75,
+                            const Color(0xFF4E424C),
+                            FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight / 40.727),
+                    fieldText(
+                      "Popular items",
+                      screenHeight / 34.66,
                       const Color(0xFF4E424C),
-                      FontWeight.normal,
+                      FontWeight.w500,
                     ),
-                  ),
-                  SizedBox(width: screenHeight / 78),
-                  GestureDetector(
-                    onTap: () {},
-                    child: foodItem(
-                      "assets/icons/prawns.png",
-                      "Prawns",
-                      screenHeight / 7.75,
-                      screenWidth / 2.29,
-                      screenHeight / 780,
-                      screenHeight / 156,
-                      screenHeight / 48.75,
-                      const Color(0xFF4E424C),
-                      FontWeight.normal,
+                    SizedBox(height: screenHeight / 70.90),
+                    Consumer<Provider1>(builder: (context, abc, _) {
+                      List<ItemModel> items = abc.Items;
+                      List<String> images = abc.Images;
+                      List<double> price = abc.Price;
+
+                      return Column(
+                        children: [
+                          GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: items.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductDetails(
+                                                      index: index)));
+                                    },
+                                    child: foodCard(
+                                      screenWidth / 2.29,
+                                      screenWidth / 2.29,
+                                      "${items[index].images}",
+                                      screenWidth / 24,
+                                      screenWidth / 24,
+                                      screenWidth / 20,
+                                      screenWidth / 7.5,
+                                      screenWidth / 7.2,
+                                      "15 mins",
+                                      screenHeight / 78,
+                                      screenWidth / 24,
+                                      screenWidth / 24,
+                                      "${items[index].itemname}",
+                                      screenHeight / 48.75,
+                                      "₹ ${items[index].price}",
+                                      screenHeight / 34.66,
+                                      "500 gms",
+                                      screenHeight / 78,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          // ListView.builder(
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   shrinkWrap: true,
+                          //   itemCount: items.length,
+                          //   itemBuilder: (context, index) {
+                          //     return Column(
+                          //       children: [
+                          //         GestureDetector(
+                          //           onTap: () {
+                          //             Navigator.push(
+                          //                 context,
+                          //                 MaterialPageRoute(
+                          //                     builder: (context) =>
+                          //                         ProductDetails(
+                          //                             index: index)));
+                          //           },
+                          //           child: foodCard(
+                          //             screenWidth / 2.29,
+                          //             screenWidth / 2.29,
+                          //             "${items[index].images}",
+                          //             screenWidth / 24,
+                          //             screenWidth / 24,
+                          //             screenWidth / 20,
+                          //             screenWidth / 7.5,
+                          //             screenWidth / 7.2,
+                          //             "15 mins",
+                          //             screenHeight / 78,
+                          //             screenWidth / 24,
+                          //             screenWidth / 24,
+                          //             "${items[index].itemname}",
+                          //             screenHeight / 48.75,
+                          //             "₹ ${items[index].price}",
+                          //             screenHeight / 34.66,
+                          //             "500 gms",
+                          //             screenHeight / 78,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     );
+                          //   },
+                          // ),
+                        ],
+                      );
+                    }),
+                    /* Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductDetails()));
+                          },
+                          child: foodCard(
+                            screenWidth / 2.29,
+                            screenWidth / 2.29,
+                            "assets/images/Boneless_Chicken.png",
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            screenWidth / 20,
+                            screenWidth / 7.5,
+                            screenWidth / 7.2,
+                            "15 mins",
+                            screenHeight / 78,
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            "Boneless Chicken",
+                            screenHeight / 48.75,
+                            "₹ 25.00",
+                            screenHeight / 34.66,
+                            "500 gms",
+                            screenHeight / 78,
+                          ),
+                        ),
+                        SizedBox(width: screenHeight / 78),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductDetails()));
+                          },
+                          child: foodCard(
+                            screenWidth / 2.29,
+                            screenWidth / 2.29,
+                            "assets/images/Whole_bird_with_screen.png",
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            screenWidth / 20,
+                            screenWidth / 7.5,
+                            screenWidth / 7.2,
+                            "15 mins",
+                            screenHeight / 78,
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            "Boneless Chicken",
+                            screenHeight / 48.75,
+                            "₹ 125.00",
+                            screenHeight / 34.66,
+                            "500 gms",
+                            screenHeight / 78,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: screenHeight / 70.90),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductDetails()));
+                          },
+                          child: foodCard(
+                            screenWidth / 2.29,
+                            screenWidth / 2.29,
+                            "assets/images/3th_food.png",
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            screenWidth / 20,
+                            screenWidth / 7.5,
+                            screenWidth / 7.2,
+                            "15 mins",
+                            screenHeight / 78,
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            "Boneless Chicken",
+                            screenHeight / 48.75,
+                            "₹ 25.00",
+                            screenHeight / 34.66,
+                            "500 gms",
+                            screenHeight / 78,
+                          ),
+                        ),
+                        SizedBox(width: screenHeight / 78),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductDetails()));
+                          },
+                          child: foodCard(
+                            screenWidth / 2.29,
+                            screenWidth / 2.29,
+                            "assets/images/4th_food.png",
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            screenWidth / 20,
+                            screenWidth / 7.5,
+                            screenWidth / 7.2,
+                            "15 mins",
+                            screenHeight / 78,
+                            screenWidth / 24,
+                            screenWidth / 24,
+                            "Boneless Chicken",
+                            screenHeight / 48.75,
+                            "₹ 25.00",
+                            screenHeight / 34.66,
+                            "500 gms",
+                            screenHeight / 78,
+                          ),
+                        ),
+                      ],
+                    ),*/
+                  ],
+                ),
               ),
-              SizedBox(height: screenHeight / 40.727),
-              fieldText(
-                "Popular items",
-                screenHeight / 34.66,
-                const Color(0xFF4E424C),
-                FontWeight.w500,
-              ),
-              SizedBox(height: screenHeight / 70.90),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetails()));
-                    },
-                    child: foodCard(
-                      screenWidth / 2.29,
-                      screenWidth / 2.29,
-                      "assets/images/Boneless_Chicken.png",
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      screenWidth / 20,
-                      screenWidth / 7.5,
-                      screenWidth / 7.2,
-                      "15 mins",
-                      screenHeight / 78,
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      "Boneless Chicken",
-                      screenHeight / 48.75,
-                      "₹ 25.00",
-                      screenHeight / 34.66,
-                      "500 gms",
-                      screenHeight / 78,
-                    ),
-                  ),
-                  SizedBox(width: screenHeight / 78),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetails()));
-                    },
-                    child: foodCard(
-                      screenWidth / 2.29,
-                      screenWidth / 2.29,
-                      "assets/images/Whole_bird_with_screen.png",
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      screenWidth / 20,
-                      screenWidth / 7.5,
-                      screenWidth / 7.2,
-                      "15 mins",
-                      screenHeight / 78,
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      "Boneless Chicken",
-                      screenHeight / 48.75,
-                      "₹ 125.00",
-                      screenHeight / 34.66,
-                      "500 gms",
-                      screenHeight / 78,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: screenHeight / 70.90),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetails()));
-                    },
-                    child: foodCard(
-                      screenWidth / 2.29,
-                      screenWidth / 2.29,
-                      "assets/images/3th_food.png",
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      screenWidth / 20,
-                      screenWidth / 7.5,
-                      screenWidth / 7.2,
-                      "15 mins",
-                      screenHeight / 78,
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      "Boneless Chicken",
-                      screenHeight / 48.75,
-                      "₹ 25.00",
-                      screenHeight / 34.66,
-                      "500 gms",
-                      screenHeight / 78,
-                    ),
-                  ),
-                  SizedBox(width: screenHeight / 78),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetails()));
-                    },
-                    child: foodCard(
-                      screenWidth / 2.29,
-                      screenWidth / 2.29,
-                      "assets/images/4th_food.png",
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      screenWidth / 20,
-                      screenWidth / 7.5,
-                      screenWidth / 7.2,
-                      "15 mins",
-                      screenHeight / 78,
-                      screenWidth / 24,
-                      screenWidth / 24,
-                      "Boneless Chicken",
-                      screenHeight / 48.75,
-                      "₹ 25.00",
-                      screenHeight / 34.66,
-                      "500 gms",
-                      screenHeight / 78,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+          //1
+          Container(),
+          //2
+          CartPage(),
+          //3
+          Container(),
+        ],
       ),
       bottomNavigationBar: Container(
         color: Color(0xFF4E424C),
@@ -308,12 +416,7 @@ class _HomeState extends State<Home> {
               GButton(
                 onPressed: () {
                   setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(),
-                      ),
-                    );
+                    selectedIndex = 0;
                   });
                 },
                 icon: Icons.home_outlined,
@@ -322,17 +425,17 @@ class _HomeState extends State<Home> {
               GButton(
                 icon: CupertinoIcons.search,
                 text: "Search",
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 1;
+                  });
+                },
               ),
               GButton(
                 onPressed: () {
                   setState(
                     () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartPage(),
-                        ),
-                      );
+                      selectedIndex = 2;
                     },
                   );
                 },
@@ -342,6 +445,11 @@ class _HomeState extends State<Home> {
               GButton(
                 icon: CupertinoIcons.bag,
                 text: "Bag",
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 3;
+                  });
+                },
               ),
             ],
           ),
